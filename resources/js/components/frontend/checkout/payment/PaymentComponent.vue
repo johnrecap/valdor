@@ -199,7 +199,31 @@ export default {
                 this.loading.isActive = false;
                 let paymentSlug = Object.keys(this.paymentMethod).length > 0 ? this.paymentMethod.slug : '';
                 if (paymentSlug) {
-                    window.location.href = ENV.API_URL + "/payment/" + paymentSlug + "/pay/" + orderResponse.data.data.id;
+                    // For InstaPay and Mada, go directly to payment processing
+                    if (paymentSlug === 'instapay' || paymentSlug === 'mada') {
+                        // Create a form and submit it to trigger payment gateway
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = ENV.API_URL + '/payment/' + orderResponse.data.data.id + '/pay';
+                        
+                        const paymentMethodField = document.createElement('input');
+                        paymentMethodField.type = 'hidden';
+                        paymentMethodField.name = 'paymentMethod';
+                        paymentMethodField.value = paymentSlug;
+                        form.appendChild(paymentMethodField);
+                        
+                        const csrfField = document.createElement('input');
+                        csrfField.type = 'hidden';
+                        csrfField.name = '_token';
+                        csrfField.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        form.appendChild(csrfField);
+                        
+                        document.body.appendChild(form);
+                        form.submit();
+                    } else {
+                        // For other payment methods, go to payment selection page
+                        window.location.href = ENV.API_URL + "/payment/" + paymentSlug + "/pay/" + orderResponse.data.data.id;
+                    }
                 } else {
                     alertService.error(this.$t('message.payment_method_required'));
                 }

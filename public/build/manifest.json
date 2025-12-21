@@ -124,7 +124,7 @@
     "src": "public/themes/default/fonts/urbanist/Urbanist-Thin.ttf"
   },
   "resources/css/app.css": {
-    "file": "assets/app-JjA-UBBp.css",
+    "file": "assets/app-B34OlxO2.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -139,17 +139,17 @@
     "isEntry": true
   },
   "resources/css/navbar.css": {
-    "file": "assets/navbar-SxhdaYaw.css",
+    "file": "assets/navbar-Dk4Oh7Hd.css",
     "src": "resources/css/navbar.css",
     "isEntry": true
   },
   "resources/css/tailwind.css": {
-    "file": "assets/tailwind-DlhcyTuY.css",
+    "file": "assets/tailwind-Ch-kOwG3.css",
     "src": "resources/css/tailwind.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-D31WWbFz.js",
+    "file": "assets/app-E0-yBo5J.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
