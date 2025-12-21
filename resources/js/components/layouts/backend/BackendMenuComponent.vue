@@ -5,7 +5,7 @@
         <nav class="db-sidebar-nav">
             <div class="db-sidebar-header">
                 <router-link class="w-24" :to="{ name: 'frontend.home' }">
-                    <img :src="setting.theme_logo" alt="logo">
+                    <img class="h-8 w-auto max-w-full object-contain" :src="setting.theme_logo" alt="logo">
                 </router-link>
                 <button @click.prevent="closeSidebar" class="lab-line-circle-cross text-lg text-danger"></button>
             </div>
