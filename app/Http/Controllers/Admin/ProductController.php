@@ -53,8 +53,11 @@ class ProductController extends AdminController
     public function store(ProductRequest $request): \Illuminate\Http\Response|ProductAdminResource|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         try {
+            \Log::info('Product Store Request:', $request->all());
             return new ProductAdminResource($this->productService->store($request));
         } catch (Exception $exception) {
+            \Log::error('Product Store Error: ' . $exception->getMessage());
+            \Log::error('Stack Trace: ' . $exception->getTraceAsString());
             return response(['status' => false, 'message' => $exception->getMessage()], 422);
         }
     }
