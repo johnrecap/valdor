@@ -26,7 +26,7 @@ class Mada extends PaymentAbstract
         parent::__construct($paymentService);
     }
 
-    public function payment($order, $request): \Illuminate\Http\RedirectResponse
+    public function payment($order, $request): \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\View
     {
         try {
             $paymentGateway = PaymentGateway::where(['slug' => 'mada', 'status' => Activity::ENABLE])->first();
@@ -52,18 +52,21 @@ class Mada extends PaymentAbstract
                     'created_at' => now()
                 ]);
 
-                // TODO: Integrate with Mada payment provider API (HyperPay, Moyasar, etc.)
-                // For now, redirect to success page (placeholder implementation)
-                // When credentials are configured, add actual API integration here:
-                // $merchantId = $gatewayOptions['mada_merchant_id'];
-                // $apiKey = $gatewayOptions['mada_api_key'];
-                // $mode = $gatewayOptions['mada_mode'];
+                // Get phone number and account name from gateway options
+                $phoneNumber = $gatewayOptions['mada_phone_number'] ?? '';
+                $accountName = $gatewayOptions['mada_account_name'] ?? '';
 
-                if ($token) {
-                    return redirect()->away(route('payment.success', ['paymentGateway' => 'mada', 'order' => $order, 'token' => $token]));
-                } else {
-                    return redirect()->route('payment.index', ['order' => $order, 'paymentGateway' => 'mada'])->with('error', trans('all.message.something_wrong'));
-                }
+                // Return view with payment info
+                return view('payment.manual-payment', [
+                    'order' => $order,
+                    'gateway' => 'mada',
+                    'gatewayName' => 'Mada',
+                    'phoneNumber' => $phoneNumber,
+                    'accountName' => $accountName,
+                    'token' => $token,
+                    'amount' => $order->total,
+                    'currency' => Settings::group('site')->get('site_default_currency_symbol') ?? 'ر.س',
+                ]);
             } else {
                 return redirect()->route('payment.index', ['order' => $order, 'paymentGateway' => 'mada'])->with('error', trans('all.message.something_wrong'));
             }

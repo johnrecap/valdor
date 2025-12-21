@@ -689,13 +689,11 @@
                 "easypaisa_status": "Easypaisa Status",
                 "easypaisa_username": "Easypaisa Username",
                 "easypaisa_password": "Easypaisa Password",
-                "instapay_api_key": "InstaPay API Key",
-                "instapay_merchant_code": "InstaPay Merchant Code",
-                "instapay_mode": "InstaPay Mode",
+                "instapay_phone_number": "InstaPay Phone Number",
+                "instapay_account_name": "InstaPay Account Name",
                 "instapay_status": "InstaPay Status",
-                "mada_merchant_id": "Mada Merchant ID",
-                "mada_api_key": "Mada API Key",
-                "mada_mode": "Mada Mode",
+                "mada_phone_number": "Mada Phone Number",
+                "mada_account_name": "Mada Account Name",
                 "mada_status": "Mada Status"
         },
         "button": {

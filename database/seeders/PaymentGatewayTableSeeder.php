@@ -39,22 +39,14 @@ class PaymentGatewayTableSeeder extends Seeder
             "status"  => Activity::ENABLE,
             "options" => [
                 [
-                    "option"     => 'instapay_api_key',
+                    "option"     => 'instapay_phone_number',
                     "type"       => InputType::TEXT,
                     "activities" => ''
                 ],
                 [
-                    "option"     => 'instapay_merchant_code',
+                    "option"     => 'instapay_account_name',
                     "type"       => InputType::TEXT,
                     "activities" => ''
-                ],
-                [
-                    "option"     => 'instapay_mode',
-                    "type"       => InputType::SELECT,
-                    "activities" => [
-                        GatewayMode::SANDBOX => 'sandbox',
-                        GatewayMode::LIVE    => 'live'
-                    ]
                 ],
                 [
                     "option"     => 'instapay_status',
@@ -74,22 +66,14 @@ class PaymentGatewayTableSeeder extends Seeder
             "status"  => Activity::ENABLE,
             "options" => [
                 [
-                    "option"     => 'mada_merchant_id',
+                    "option"     => 'mada_phone_number',
                     "type"       => InputType::TEXT,
                     "activities" => ''
                 ],
                 [
-                    "option"     => 'mada_api_key',
+                    "option"     => 'mada_account_name',
                     "type"       => InputType::TEXT,
                     "activities" => ''
-                ],
-                [
-                    "option"     => 'mada_mode',
-                    "type"       => InputType::SELECT,
-                    "activities" => [
-                        GatewayMode::SANDBOX => 'sandbox',
-                        GatewayMode::LIVE    => 'live'
-                    ]
                 ],
                 [
                     "option"     => 'mada_status',

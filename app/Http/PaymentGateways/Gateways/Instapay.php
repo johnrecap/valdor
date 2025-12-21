@@ -26,7 +26,7 @@ class Instapay extends PaymentAbstract
         parent::__construct($paymentService);
     }
 
-    public function payment($order, $request): \Illuminate\Http\RedirectResponse
+    public function payment($order, $request): \Illuminate\Http\RedirectResponse|\Illuminate\Contracts\View\View
     {
         try {
             $paymentGateway = PaymentGateway::where(['slug' => 'instapay', 'status' => Activity::ENABLE])->first();
@@ -52,18 +52,21 @@ class Instapay extends PaymentAbstract
                     'created_at' => now()
                 ]);
 
-                // TODO: Integrate with InstaPay API
-                // For now, redirect to success page (placeholder implementation)
-                // When credentials are configured, add actual API integration here:
-                // $apiKey = $gatewayOptions['instapay_api_key'];
-                // $merchantCode = $gatewayOptions['instapay_merchant_code'];
-                // $mode = $gatewayOptions['instapay_mode'];
+                // Get phone number and account name from gateway options
+                $phoneNumber = $gatewayOptions['instapay_phone_number'] ?? '';
+                $accountName = $gatewayOptions['instapay_account_name'] ?? '';
 
-                if ($token) {
-                    return redirect()->away(route('payment.success', ['paymentGateway' => 'instapay', 'order' => $order, 'token' => $token]));
-                } else {
-                    return redirect()->route('payment.index', ['order' => $order, 'paymentGateway' => 'instapay'])->with('error', trans('all.message.something_wrong'));
-                }
+                // Return view with payment info
+                return view('payment.manual-payment', [
+                    'order' => $order,
+                    'gateway' => 'instapay',
+                    'gatewayName' => 'InstaPay',
+                    'phoneNumber' => $phoneNumber,
+                    'accountName' => $accountName,
+                    'token' => $token,
+                    'amount' => $order->total,
+                    'currency' => Settings::group('site')->get('site_default_currency_symbol') ?? 'ج.م',
+                ]);
             } else {
                 return redirect()->route('payment.index', ['order' => $order, 'paymentGateway' => 'instapay'])->with('error', trans('all.message.something_wrong'));
             }

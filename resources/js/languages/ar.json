@@ -688,13 +688,11 @@
         "easypaisa_status": "حالة إيزي بايسا",
         "easypaisa_username": "اسم مستخدم إيزي بايسا",
         "easypaisa_password": "كلمة مرور إيزي بايسا",
-        "instapay_api_key": "مفتاح API لـ InstaPay",
-        "instapay_merchant_code": "كود التاجر InstaPay",
-        "instapay_mode": "بيئة InstaPay",
+        "instapay_phone_number": "رقم تليفون InstaPay",
+        "instapay_account_name": "اسم حساب InstaPay",
         "instapay_status": "حالة InstaPay",
-        "mada_merchant_id": "معرف التاجر Mada",
-        "mada_api_key": "مفتاح API لـ Mada",
-        "mada_mode": "بيئة Mada",
+        "mada_phone_number": "رقم تليفون Mada",
+        "mada_account_name": "اسم حساب Mada",
         "mada_status": "حالة Mada"
     },
     "button": {
