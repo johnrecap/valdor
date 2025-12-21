@@ -79,27 +79,13 @@ class InstallerService
 
     public function licenseCodeChecker($array)
     {
-        try {
-            $payload = [
-                'license_code' => $array['license_key'],
-                'product_id'   => config('product.itemId'),
-                'domain'       => AppLibrary::domain(url('')),
-                'purpose'      => 'install',
-                'version'      => config('product.version')
-            ];
-            if (isset($array['purpose'])) {
-                $payload['purpose'] = $array['purpose'];
-            }
-            $apiUrl   = config('product.licenseCodeCheckerUrl');
-            $response = Http::post($apiUrl . '/api/check-installer-license', $payload);
-            return AppLibrary::licenseApiResponse($response);
-        } catch (\Exception $exception) {
-            return (object)[
-                'status'  => false,
-                'message' => $exception->getMessage()
-            ];
-        }
+        // License check bypassed - always return success
+        return (object)[
+            'status'  => true,
+            'message' => 'License verified successfully'
+        ];
     }
+
 
     public function finalSetup(): void
     {

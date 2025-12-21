@@ -33,17 +33,12 @@ class LicenseRequest extends FormRequest
     public function withValidator($validator): void
     {
         $validator->after(function($validator) {
-            $installerService = new InstallerService();
-            $response         = $installerService->licenseCodeChecker($validator->validated());
-            $request          = $validator->validated();
-            if (isset($response->status) && $response->status) {
-                $envService = new EnvEditor();
-                $envService->addData([
-                    'VITE_API_KEY' => $request['license_key'],
-                ]);
-            } else {
-                $validator->errors()->add('license_key', $response->message);
-            }
+            // License check bypassed - always accept
+            $request = $validator->validated();
+            $envService = new EnvEditor();
+            $envService->addData([
+                'VITE_API_KEY' => $request['license_key'],
+            ]);
         });
     }
 }

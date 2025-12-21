@@ -33,6 +33,76 @@ class PaymentGatewayTableSeeder extends Seeder
             "options" => [],
         ],
         [
+            "name"    => "InstaPay",
+            "slug"    => "instapay",
+            "misc"    => null,
+            "status"  => Activity::ENABLE,
+            "options" => [
+                [
+                    "option"     => 'instapay_api_key',
+                    "type"       => InputType::TEXT,
+                    "activities" => ''
+                ],
+                [
+                    "option"     => 'instapay_merchant_code',
+                    "type"       => InputType::TEXT,
+                    "activities" => ''
+                ],
+                [
+                    "option"     => 'instapay_mode',
+                    "type"       => InputType::SELECT,
+                    "activities" => [
+                        GatewayMode::SANDBOX => 'sandbox',
+                        GatewayMode::LIVE    => 'live'
+                    ]
+                ],
+                [
+                    "option"     => 'instapay_status',
+                    "value"      => Activity::ENABLE,
+                    "type"       => InputType::SELECT,
+                    "activities" => [
+                        Activity::ENABLE  => "enable",
+                        Activity::DISABLE => "disable",
+                    ]
+                ],
+            ]
+        ],
+        [
+            "name"    => "Mada",
+            "slug"    => "mada",
+            "misc"    => null,
+            "status"  => Activity::ENABLE,
+            "options" => [
+                [
+                    "option"     => 'mada_merchant_id',
+                    "type"       => InputType::TEXT,
+                    "activities" => ''
+                ],
+                [
+                    "option"     => 'mada_api_key',
+                    "type"       => InputType::TEXT,
+                    "activities" => ''
+                ],
+                [
+                    "option"     => 'mada_mode',
+                    "type"       => InputType::SELECT,
+                    "activities" => [
+                        GatewayMode::SANDBOX => 'sandbox',
+                        GatewayMode::LIVE    => 'live'
+                    ]
+                ],
+                [
+                    "option"     => 'mada_status',
+                    "value"      => Activity::ENABLE,
+                    "type"       => InputType::SELECT,
+                    "activities" => [
+                        Activity::ENABLE  => "enable",
+                        Activity::DISABLE => "disable",
+                    ]
+                ],
+            ]
+        ],
+        [
             "name"    => "Paypal",
             "slug"    => "paypal",
             "misc"    => null,

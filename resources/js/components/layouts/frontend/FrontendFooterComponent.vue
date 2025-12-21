@@ -7,7 +7,7 @@
                 <div class="col-12 lg:col-4 mb-6 lg:mb-0">
                     <div class="max-lg:text-center max-lg:mx-auto w-full max-w-xs">
                         <router-link :to="{ name: 'frontend.home' }">
-                            <img class="w-24" :src="setting.theme_footer_logo" alt="logo">
+                            <img class="h-12 sm:h-14 w-auto max-w-[180px] object-contain" :src="setting.theme_footer_logo" alt="logo">
                         </router-link>
                         <form class="mt-5 mb-6 block" @submit.prevent="saveSubscription">
                             <label class="mb-3 font-medium text-white">{{ $t('message.subscribe_to_our_newsletter') }}

@@ -1,7 +1,7 @@
 <template>
     <header :class="isSticky == true
-        ? 'fixed top-0 left-0 z-30 w-full shadow-xs bg-white'
-        : 'sm:mb-6 sm:shadow-xs bg-white'
+        ? 'fixed top-0 left-0 z-30 w-full shadow-xs bg-[#0a0a0a]'
+        : 'sm:mb-6 sm:shadow-xs bg-[#0a0a0a]'
         ">
 
         <div class="container">
@@ -13,7 +13,7 @@
                         <i class="lab-line-humburger text-xl"></i>
                     </button>
                     <RouterLink to="/" class="flex-shrink-0">
-                        <img class="w-24" :src="setting.theme_logo" alt="logo">
+                        <img class="h-10 sm:h-12 w-auto max-w-[160px] object-contain" :src="setting.theme_logo" alt="logo">
                     </RouterLink>
                 </div>
                 <button type="button" @click.prevent="showTarget('search', 'search-active')"
@@ -21,13 +21,13 @@
                     <i class="lab-line-search text-xl"></i>
                 </button>
                 <form @submit.prevent="search()"
-                    class="w-full max-w-md h-10 group rounded-3xl hidden lg:flex items-center gap-2 px-4 border border-gray-100 bg-gray-100 transition-all duration-300 focus-within:border-primary focus-within:bg-white">
+                    class="w-full max-w-md h-10 group rounded-3xl hidden lg:flex items-center gap-2 px-4 border border-gray-700 bg-[#1a1a1a] transition-all duration-300 focus-within:border-primary focus-within:bg-[#0a0a0a]">
                     <button class="lab-line-search text-lg flex-shrink-0"></button>
                     <input type="search" v-model="searchProduct" :placeholder="$t('label.search') + '...'"
                         class="w-full h-full" />
                     <button type="button" @click.prevent="searchReset"
                         class="transition invisible group-focus-within:visible">
-                        <i class="lab-fill-close-circle sm:text-xl text-green-500"></i>
+                        <i class="lab-fill-close-circle sm:text-xl text-primary"></i>
                     </button>
                 </form>
                 <div class="hidden lg:flex items-center gap-8">
@@ -36,7 +36,7 @@
                         <button id="languagePaper" @click.prevent="handlePaper"
                             class="paper-button flex items-center gap-2 down-arrow">
                             <img :src="language.image" alt="flags" class="w-6 h-6 rounded-full">
-                            <span class="font-semibold capitalize">{{ language.name }}</span>
+                            <span class="font-semibold capitalize text-white">{{ language.name }}</span>
                         </button>
                         <ul
                             class="paper-content w-40 absolute top-12 ltr:right-0 rtl:left-0 shadow-paper rounded-lg z-10 p-2 bg-white transition-all duration-300 origin-top scale-y-0 group-hover:scale-y-100">
@@ -56,7 +56,7 @@
                             class="lab-line-heart w-6 h-6 text-sm leading-6 text-center rounded-full bg-primary text-white">
                         </i>
 
-                        <span class="font-semibold capitalize"> {{ $t("label.favorite") }}</span>
+                        <span class="font-semibold capitalize text-white"> {{ $t("label.favorite") }}</span>
                     </router-link>
 
                     <div class="paper-group">
@@ -64,14 +64,14 @@
                             <i
                                 class="lab-line-user w-6 h-6 text-sm leading-6 text-center rounded-full bg-primary text-white">
                             </i>
-                            <span class="font-semibold capitalize"> {{ $t("label.account") }}</span>
+                            <span class="font-semibold capitalize text-white"> {{ $t("label.account") }}</span>
                         </router-link>
                         <button id="profilePaperBtn" v-else @click.prevent="handlePaper"
                             class="paper-button flex items-center gap-2">
                             <i
                                 class="lab-line-user  w-6 h-6 text-sm  leading-6 text-center rounded-full bg-primary text-white">
                             </i>
-                            <span class="font-semibold capitalize"> {{ $t("label.account") }}</span>
+                            <span class="font-semibold capitalize text-white"> {{ $t("label.account") }}</span>
                             <i class="lab-line-chevron-down font-semibold"></i>
                         </button>
                         <div v-if="logged"
@@ -154,7 +154,7 @@
             </div>
         </div>
 
-        <div :class="isScrollingUp ? 'hidden lg:block' : 'hidden'" class="border-t border-gray-100">
+        <div :class="isScrollingUp ? 'hidden lg:block' : 'hidden'" class="border-t border-gray-800">
             <div class="container">
                 <div class="flex items-center justify-between gap-5 h-[74px]">
                     <div class="flex items-center justify-between gap-12">
@@ -186,27 +186,27 @@
                         <nav class="flex items-center gap-8">
                             <router-link :to="{ name: 'frontend.home' }"
                                 :class="checkIsPathAndRoutePathSame('/home') ? 'text-primary' : ''"
-                                class="text-sm font-semibold capitalize text-heading transition-all duration-300 hover:text-primary">
+                                class="text-sm font-semibold capitalize text-white transition-all duration-300 hover:text-primary">
                                 {{ $t("label.home") }}</router-link>
 
                             <router-link :to="{ name: 'frontend.offers' }"
                                 :class="checkIsPathAndRoutePathSame('/offers') ? 'text-primary' : ''"
-                                class="text-sm font-semibold capitalize text-heading transition-all duration-300 hover:text-primary">
+                                class="text-sm font-semibold capitalize text-white transition-all duration-300 hover:text-primary">
                                 {{ $t("label.offers") }}</router-link>
 
                             <router-link :to="{ name: 'frontend.daily.deals' }"
                                 :class="checkIsPathAndRoutePathSame('/daily-deals') ? 'text-primary' : ''"
-                                class="text-sm font-semibold capitalize text-heading transition-all duration-300 hover:text-primary">
+                                class="text-sm font-semibold capitalize text-white transition-all duration-300 hover:text-primary">
                                 {{ $t("label.daily_deals") }}</router-link>
                             <router-link v-if="flashSaleProducts.length > 0"
                                 :class="checkIsPathAndRoutePathSame('/flash-sale') ? 'text-primary' : ''"
                                 :to="{ name: 'frontend.flashSale.products' }"
-                                class="text-sm font-semibold capitalize text-heading transition-all duration-300 hover:text-primary">
+                                class="text-sm font-semibold capitalize text-white transition-all duration-300 hover:text-primary">
                                 {{ $t("label.flash_sale") }}</router-link>
                         </nav>
                     </div>
                     <div class="flex items-center justify-between gap-12">
-                        <div class="flex items-center gap-2 text-[#007FE3]">
+                        <div class="flex items-center gap-2 text-primary">
                             <i class="lab-line-call-center font-medium"></i>
                             <a :href="'callto:' + setting.company_phone" class="text-sm font-semibold">{{
                                 setting.company_phone }}</a>
@@ -228,7 +228,7 @@
         <div class="flex items-center justify-between mb-4">
             <router-link :to="{ name: 'frontend.home' }"
                 class="router-link-active router-link-exact-active flex-shrink-0">
-                <img class="w-28 sm:w-32" :src="setting.theme_logo" alt="logo">
+                <img class="h-10 sm:h-12 w-auto max-w-[180px] object-contain" :src="setting.theme_logo" alt="logo">
             </router-link>
             <button type="button">
                 <i @click.prevent="hideTarget('search', 'search-active')"
