@@ -64,7 +64,17 @@ return [
         'reason'                     => 'السبب',
         'total_return_price'         => 'إجمالي سعر الإرجاع',
         'source'                     => 'المصدر',
-        'zone_name'                  => 'اسم المنطقة'
+        'zone_name'                  => 'اسم المنطقة',
+        // InstaPay Labels
+        'instapay_api_key'           => 'مفتاح API لـ InstaPay',
+        'instapay_merchant_code'     => 'كود التاجر InstaPay',
+        'instapay_mode'              => 'بيئة InstaPay',
+        'instapay_status'            => 'حالة InstaPay',
+        // Mada Labels
+        'mada_merchant_id'           => 'معرف التاجر Mada',
+        'mada_api_key'               => 'مفتاح API لـ Mada',
+        'mada_mode'                  => 'بيئة Mada',
+        'mada_status'                => 'حالة Mada'
     ],
     'message' => [
         'validation_error'                 => 'خطأ في التحقق.',
