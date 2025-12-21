@@ -1,8 +1,6 @@
 <template>
     <LoadingComponent :props="loading" />
-    <div class="w-full max-w-3xl mx-auto rounded-2xl flex overflow-hidden gap-y-6 bg-white shadow-card sm:mb-20">
-        <img :src="APP_URL + '/images/required/auth.png'" alt="banners"
-            class="w-full hidden sm:block sm:max-w-xs md:max-w-sm flex-shrink-0" />
+    <div class="w-full max-w-lg mx-auto rounded-2xl overflow-hidden bg-white shadow-card sm:mb-20">
         <form class="w-full p-6" @submit.prevent="save">
             <div class="text-center relative mb-8">
                 <router-link :to="{ name: 'auth.forgotPassword' }"
