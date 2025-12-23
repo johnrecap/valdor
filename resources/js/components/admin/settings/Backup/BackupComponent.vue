@@ -143,7 +143,7 @@ export default {
         async fetchBackups() {
             try {
                 this.loading.isActive = true;
-                const response = await axios.get('/admin/system-backup');
+                const response = await axios.get('/admin/setting/system-backup');
                 if (response.data.status) {
                     this.backups = response.data.data;
                 }
@@ -157,7 +157,7 @@ export default {
         async createBackup() {
             try {
                 this.loading.isActive = true;
-                const response = await axios.post('/admin/system-backup');
+                const response = await axios.post('/admin/setting/system-backup');
                 if (response.data.status) {
                     alertService.success(this.$t("backup.created_success"));
                     this.fetchBackups();
@@ -180,7 +180,7 @@ export default {
             try {
                 this.showRestoreModal = false;
                 this.loading.isActive = true;
-                const response = await axios.post('/admin/system-backup/restore', {
+                const response = await axios.post('/admin/setting/system-backup/restore', {
                     filename: this.selectedBackup.filename
                 });
                 if (response.data.status) {
@@ -204,7 +204,7 @@ export default {
             try {
                 this.showDeleteModal = false;
                 this.loading.isActive = true;
-                const response = await axios.delete(`/admin/system-backup/${this.selectedBackup.filename}`);
+                const response = await axios.delete(`/admin/setting/system-backup/${this.selectedBackup.filename}`);
                 if (response.data.status) {
                     alertService.success(this.$t("backup.deleted_success"));
                     this.fetchBackups();
@@ -219,7 +219,7 @@ export default {
         },
 
         downloadBackup(filename) {
-            window.open(`/admin/system-backup/download/${filename}`, '_blank');
+            window.open(`/admin/setting/system-backup/download/${filename}`, '_blank');
         },
 
         formatDate(dateStr) {
