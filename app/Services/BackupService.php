@@ -309,68 +309,54 @@ class BackupService
 
     protected function restoreProductCategories(array $data): int
     {
-        $count = 0;
-        foreach ($data as $item) {
-            ProductCategory::updateOrCreate(
-                ['id' => $item['id']],
-                collect($item)->except(['created_at', 'updated_at'])->toArray()
-            );
-            $count++;
-        }
-        return $count;
+        if (empty($data)) return 0;
+
+        // Clean data for insertion
+        $cleanData = collect($data)->map(function ($item) {
+            return collect($item)->except(['media', 'products', 'children', 'parent'])->toArray();
+        })->toArray();
+
+        DB::table('product_categories')->insert($cleanData);
+        return count($cleanData);
     }
 
     protected function restoreProductBrands(array $data): int
     {
-        $count = 0;
-        foreach ($data as $item) {
-            ProductBrand::updateOrCreate(
-                ['id' => $item['id']],
-                collect($item)->except(['created_at', 'updated_at'])->toArray()
-            );
-            $count++;
-        }
-        return $count;
+        if (empty($data)) return 0;
+
+        $cleanData = collect($data)->map(function ($item) {
+            return collect($item)->except(['media', 'products'])->toArray();
+        })->toArray();
+
+        DB::table('product_brands')->insert($cleanData);
+        return count($cleanData);
     }
 
     protected function restoreUnits(array $data): int
     {
-        $count = 0;
-        foreach ($data as $item) {
-            Unit::updateOrCreate(
-                ['id' => $item['id']],
-                collect($item)->except(['created_at', 'updated_at'])->toArray()
-            );
-            $count++;
-        }
-        return $count;
+        if (empty($data)) return 0;
+        DB::table('units')->insert($data);
+        return count($data);
     }
 
     protected function restoreTaxes(array $data): int
     {
-        $count = 0;
-        foreach ($data as $item) {
-            Tax::updateOrCreate(
-                ['id' => $item['id']],
-                collect($item)->except(['created_at', 'updated_at'])->toArray()
-            );
-            $count++;
-        }
-        return $count;
+        if (empty($data)) return 0;
+        DB::table('taxes')->insert($data);
+        return count($data);
     }
 
     protected function restoreProducts(array $data): int
     {
-        $count = 0;
-        foreach ($data as $item) {
-            $productData = collect($item)->except(['seo', 'tags', 'taxes', 'created_at', 'updated_at', 'media'])->toArray();
-            Product::updateOrCreate(
-                ['id' => $item['id']],
-                $productData
-            );
-            $count++;
-        }
-        return $count;
+        if (empty($data)) return 0;
+
+        // Clean product data - remove relations
+        $cleanData = collect($data)->map(function ($item) {
+            return collect($item)->except(['seo', 'tags', 'taxes', 'media', 'variations', 'category', 'brand', 'unit', 'order_products'])->toArray();
+        })->toArray();
+
+        DB::table('products')->insert($cleanData);
+        return count($cleanData);
     }
 
     protected function restoreSettings(array $data): int
