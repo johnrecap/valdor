@@ -307,15 +307,51 @@ class BackupService
 
     // ===================== RESTORE METHODS =====================
 
+    /**
+     * Convert ISO 8601 datetime to MySQL format
+     */
+    protected function convertDateTime($value): ?string
+    {
+        if (empty($value)) return null;
+        try {
+            return Carbon::parse($value)->format('Y-m-d H:i:s');
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Clean data row by converting datetime fields
+     */
+    protected function cleanDataRow(array $item, array $validColumns): array
+    {
+        $cleaned = collect($item)->only($validColumns)->toArray();
+
+        // Convert datetime fields
+        if (isset($cleaned['created_at'])) {
+            $cleaned['created_at'] = $this->convertDateTime($cleaned['created_at']);
+        }
+        if (isset($cleaned['updated_at'])) {
+            $cleaned['updated_at'] = $this->convertDateTime($cleaned['updated_at']);
+        }
+        if (isset($cleaned['offer_start_date'])) {
+            $cleaned['offer_start_date'] = $this->convertDateTime($cleaned['offer_start_date']);
+        }
+        if (isset($cleaned['offer_end_date'])) {
+            $cleaned['offer_end_date'] = $this->convertDateTime($cleaned['offer_end_date']);
+        }
+
+        return $cleaned;
+    }
+
     protected function restoreProductCategories(array $data): int
     {
         if (empty($data)) return 0;
 
-        // Only include actual table columns
         $validColumns = ['id', 'name', 'slug', 'description', 'status', 'parent_id', 'creator_type', 'creator_id', 'editor_type', 'editor_id', 'created_at', 'updated_at'];
 
         $cleanData = collect($data)->map(function ($item) use ($validColumns) {
-            return collect($item)->only($validColumns)->toArray();
+            return $this->cleanDataRow($item, $validColumns);
         })->toArray();
 
         DB::table('product_categories')->insert($cleanData);
@@ -326,11 +362,10 @@ class BackupService
     {
         if (empty($data)) return 0;
 
-        // Only include actual table columns
         $validColumns = ['id', 'name', 'slug', 'description', 'status', 'creator_type', 'creator_id', 'editor_type', 'editor_id', 'created_at', 'updated_at'];
 
         $cleanData = collect($data)->map(function ($item) use ($validColumns) {
-            return collect($item)->only($validColumns)->toArray();
+            return $this->cleanDataRow($item, $validColumns);
         })->toArray();
 
         DB::table('product_brands')->insert($cleanData);
@@ -344,7 +379,7 @@ class BackupService
         $validColumns = ['id', 'name', 'code', 'status', 'created_at', 'updated_at'];
 
         $cleanData = collect($data)->map(function ($item) use ($validColumns) {
-            return collect($item)->only($validColumns)->toArray();
+            return $this->cleanDataRow($item, $validColumns);
         })->toArray();
 
         DB::table('units')->insert($cleanData);
@@ -358,7 +393,7 @@ class BackupService
         $validColumns = ['id', 'name', 'code', 'tax_rate', 'status', 'created_at', 'updated_at'];
 
         $cleanData = collect($data)->map(function ($item) use ($validColumns) {
-            return collect($item)->only($validColumns)->toArray();
+            return $this->cleanDataRow($item, $validColumns);
         })->toArray();
 
         DB::table('taxes')->insert($cleanData);
@@ -369,11 +404,10 @@ class BackupService
     {
         if (empty($data)) return 0;
 
-        // Only include actual table columns for products
         $validColumns = ['id', 'name', 'slug', 'sku', 'product_category_id', 'product_brand_id', 'barcode_id', 'unit_id', 'buying_price', 'selling_price', 'variation_price', 'status', 'order', 'can_purchasable', 'show_stock_out', 'file_attachment', 'maximum_purchase_quantity', 'low_stock_quantity_warning', 'weight', 'refundable', 'sell_by_fraction', 'description', 'add_to_flash_sale', 'discount', 'offer_start_date', 'offer_end_date', 'created_at', 'updated_at'];
 
         $cleanData = collect($data)->map(function ($item) use ($validColumns) {
-            return collect($item)->only($validColumns)->toArray();
+            return $this->cleanDataRow($item, $validColumns);
         })->toArray();
 
         DB::table('products')->insert($cleanData);
