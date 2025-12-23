@@ -311,9 +311,11 @@ class BackupService
     {
         if (empty($data)) return 0;
 
-        // Clean data for insertion
-        $cleanData = collect($data)->map(function ($item) {
-            return collect($item)->except(['media', 'products', 'children', 'parent'])->toArray();
+        // Only include actual table columns
+        $validColumns = ['id', 'name', 'slug', 'description', 'status', 'parent_id', 'creator_type', 'creator_id', 'editor_type', 'editor_id', 'created_at', 'updated_at'];
+
+        $cleanData = collect($data)->map(function ($item) use ($validColumns) {
+            return collect($item)->only($validColumns)->toArray();
         })->toArray();
 
         DB::table('product_categories')->insert($cleanData);
@@ -324,8 +326,11 @@ class BackupService
     {
         if (empty($data)) return 0;
 
-        $cleanData = collect($data)->map(function ($item) {
-            return collect($item)->except(['media', 'products'])->toArray();
+        // Only include actual table columns
+        $validColumns = ['id', 'name', 'slug', 'description', 'status', 'creator_type', 'creator_id', 'editor_type', 'editor_id', 'created_at', 'updated_at'];
+
+        $cleanData = collect($data)->map(function ($item) use ($validColumns) {
+            return collect($item)->only($validColumns)->toArray();
         })->toArray();
 
         DB::table('product_brands')->insert($cleanData);
@@ -335,24 +340,40 @@ class BackupService
     protected function restoreUnits(array $data): int
     {
         if (empty($data)) return 0;
-        DB::table('units')->insert($data);
-        return count($data);
+
+        $validColumns = ['id', 'name', 'code', 'status', 'created_at', 'updated_at'];
+
+        $cleanData = collect($data)->map(function ($item) use ($validColumns) {
+            return collect($item)->only($validColumns)->toArray();
+        })->toArray();
+
+        DB::table('units')->insert($cleanData);
+        return count($cleanData);
     }
 
     protected function restoreTaxes(array $data): int
     {
         if (empty($data)) return 0;
-        DB::table('taxes')->insert($data);
-        return count($data);
+
+        $validColumns = ['id', 'name', 'code', 'tax_rate', 'status', 'created_at', 'updated_at'];
+
+        $cleanData = collect($data)->map(function ($item) use ($validColumns) {
+            return collect($item)->only($validColumns)->toArray();
+        })->toArray();
+
+        DB::table('taxes')->insert($cleanData);
+        return count($cleanData);
     }
 
     protected function restoreProducts(array $data): int
     {
         if (empty($data)) return 0;
 
-        // Clean product data - remove relations
-        $cleanData = collect($data)->map(function ($item) {
-            return collect($item)->except(['seo', 'tags', 'taxes', 'media', 'variations', 'category', 'brand', 'unit', 'order_products'])->toArray();
+        // Only include actual table columns for products
+        $validColumns = ['id', 'name', 'slug', 'sku', 'product_category_id', 'product_brand_id', 'barcode_id', 'unit_id', 'buying_price', 'selling_price', 'variation_price', 'status', 'order', 'can_purchasable', 'show_stock_out', 'file_attachment', 'maximum_purchase_quantity', 'low_stock_quantity_warning', 'weight', 'refundable', 'sell_by_fraction', 'description', 'add_to_flash_sale', 'discount', 'offer_start_date', 'offer_end_date', 'created_at', 'updated_at'];
+
+        $cleanData = collect($data)->map(function ($item) use ($validColumns) {
+            return collect($item)->only($validColumns)->toArray();
         })->toArray();
 
         DB::table('products')->insert($cleanData);
