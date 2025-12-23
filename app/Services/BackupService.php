@@ -38,7 +38,7 @@ class BackupService
     /**
      * Create a full backup of production data
      */
-    public function createBackup(): array
+    public function createBackup(int $retention = 10): array
     {
         try {
             $timestamp = Carbon::now()->format('Y-m-d_H-i-s');
@@ -70,8 +70,8 @@ class BackupService
             $filepath = $this->backupPath . DIRECTORY_SEPARATOR . $filename;
             File::put($filepath, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
-            // Keep only last 10 backups
-            $this->cleanOldBackups(10);
+            // Keep only last N backups
+            $this->cleanOldBackups($retention);
 
             return [
                 'success' => true,
