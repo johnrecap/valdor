@@ -81,6 +81,7 @@ use App\Http\Controllers\Admin\AdministratorAddressController;
 use App\Http\Controllers\Admin\DeliveryBoyDashboardController;
 use App\Http\Controllers\Admin\ProductSectionProductController;
 use App\Http\Controllers\Admin\ProductAttributeOptionController;
+use App\Http\Controllers\Admin\BackupController;
 use App\Http\Controllers\Frontend\PageController as FrontendPageController;
 use App\Http\Controllers\Frontend\OrderController as FrontendOrderController;
 use App\Http\Controllers\Frontend\CouponController as FrontendCouponController;
@@ -325,6 +326,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:sanctum'])->group(func
         Route::prefix('license')->name('license.')->group(function () {
             Route::get('/', [LicenseController::class, 'index']);
             Route::match(['put', 'patch'], '/', [LicenseController::class, 'update']);
+        });
+
+        Route::prefix('backup')->name('backup.')->group(function () {
+            Route::get('/', [BackupController::class, 'index']);
+            Route::post('/', [BackupController::class, 'store']);
+            Route::post('/restore', [BackupController::class, 'restore']);
+            Route::get('/download/{filename}', [BackupController::class, 'download']);
+            Route::delete('/{filename}', [BackupController::class, 'destroy']);
         });
 
         Route::prefix('menu-section')->name('menu-section.')->group(function () {

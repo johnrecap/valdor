@@ -6,6 +6,7 @@ import OtpComponent from "../../components/admin/settings/Otp/OtpComponent.vue";
 import NotificationComponent from "../../components/admin/settings/Notification/NotificationComponent.vue";
 import SocialMediaComponent from "../../components/admin/settings/SocialMedia/SocialMediaComponent.vue";
 import LicenseComponent from "../../components/admin/settings/License/LicenseComponent.vue";
+import BackupComponent from "../../components/admin/settings/Backup/BackupComponent.vue";
 import CookiesComponent from "../../components/admin/settings/Cookies/CookiesComponent.vue";
 import AnalyticComponent from "../../components/admin/settings/analytics/AnalyticComponent.vue";
 import AnalyticListComponent from "../../components/admin/settings/analytics/AnalyticListComponent.vue";
@@ -707,6 +708,17 @@ export default [
                     auth: true,
                     permissionUrl: "settings",
                     breadcrumb: "license",
+                }
+            },
+            {
+                path: "backup",
+                component: BackupComponent,
+                name: "admin.settings.backup",
+                meta: {
+                    isFrontend: false,
+                    auth: true,
+                    permissionUrl: "settings",
+                    breadcrumb: "backup",
                 }
             },
 
