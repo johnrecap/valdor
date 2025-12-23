@@ -219,7 +219,7 @@ export default {
         },
 
         downloadBackup(filename) {
-            window.open(`/admin/setting/system-backup/download/${filename}`, '_blank');
+            window.open(`/api/admin/setting/system-backup/download/${filename}`, '_blank');
         },
 
         formatDate(dateStr) {

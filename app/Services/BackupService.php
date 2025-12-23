@@ -360,9 +360,17 @@ class BackupService
     {
         $count = 0;
         foreach ($data as $item) {
+            // Handle both array and object access, and check for key existence
+            $key = is_array($item) ? ($item['key'] ?? null) : ($item->key ?? null);
+            $value = is_array($item) ? ($item['value'] ?? null) : ($item->value ?? null);
+
+            if ($key === null) {
+                continue; // Skip invalid entries
+            }
+
             DB::table('settings')->updateOrInsert(
-                ['key' => $item->key ?? $item['key']],
-                ['value' => $item->value ?? $item['value']]
+                ['key' => $key],
+                ['value' => $value]
             );
             $count++;
         }
