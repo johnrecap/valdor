@@ -328,7 +328,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth:sanctum'])->group(func
             Route::match(['put', 'patch'], '/', [LicenseController::class, 'update']);
         });
 
-        Route::prefix('backup')->name('backup.')->group(function () {
+        Route::prefix('system-backup')->name('backup.')->group(function () {
             Route::get('/', [BackupController::class, 'index']);
             Route::post('/', [BackupController::class, 'store']);
             Route::post('/restore', [BackupController::class, 'restore']);
