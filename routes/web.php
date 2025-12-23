@@ -39,4 +39,12 @@ Route::prefix('payment')->name('payment.')->middleware(['installed'])->group(fun
     Route::match(['get', 'post'], '/{paymentGateway:slug}/{order}/cancel', [PaymentController::class, 'cancel'])->name('cancel');
     Route::get('/successful/{order}', [PaymentController::class, 'successful'])->name('successful');
 });
+Route::get('/backup/download/{filename}', function ($filename) {
+    $path = database_path('backups/' . $filename);
+    if (file_exists($path)) {
+        return response()->download($path);
+    }
+    abort(404);
+})->middleware(['auth:sanctum'])->name('backup.download');
+
 Route::get('/{any}', [RootController::class, 'index'])->middleware(['installed'])->where(['any' => '.*']);

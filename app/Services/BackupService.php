@@ -362,7 +362,8 @@ class BackupService
         foreach ($data as $item) {
             // Handle both array and object access, and check for key existence
             $key = is_array($item) ? ($item['key'] ?? null) : ($item->key ?? null);
-            $value = is_array($item) ? ($item['value'] ?? null) : ($item->value ?? null);
+            $payload = is_array($item) ? ($item['payload'] ?? null) : ($item->payload ?? null);
+            $group = is_array($item) ? ($item['group'] ?? null) : ($item->group ?? null);
 
             if ($key === null) {
                 continue; // Skip invalid entries
@@ -370,7 +371,10 @@ class BackupService
 
             DB::table('settings')->updateOrInsert(
                 ['key' => $key],
-                ['value' => $value]
+                [
+                    'payload' => is_array($payload) ? json_encode($payload) : $payload,
+                    'group' => $group
+                ]
             );
             $count++;
         }
