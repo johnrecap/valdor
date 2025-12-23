@@ -110,6 +110,19 @@ class BackupService
 
             $restored = [];
 
+            // Disable foreign key checks to allow truncation
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+            // Clear tables before restore (in reverse dependency order)
+            Product::query()->delete();
+            Tax::query()->delete();
+            Unit::query()->delete();
+            ProductBrand::query()->delete();
+            ProductCategory::query()->delete();
+
+            // Re-enable foreign key checks
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
             // Restore in order (dependencies first)
             if (isset($data['tables']['product_categories'])) {
                 $restored['product_categories'] = $this->restoreProductCategories($data['tables']['product_categories']);
