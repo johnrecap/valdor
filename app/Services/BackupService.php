@@ -245,7 +245,7 @@ class BackupService
 
     protected function backupOrders(): array
     {
-        return Order::with(['orderItems'])->get()->toArray();
+        return Order::with(['orderProducts'])->get()->toArray();
     }
 
     protected function backupOrderItems(): array
