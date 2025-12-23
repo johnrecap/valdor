@@ -115,11 +115,11 @@ class BackupService
 
             try {
                 // Clear tables before restore (in reverse dependency order)
-                Product::query()->delete();
-                Tax::query()->delete();
-                Unit::query()->delete();
-                ProductBrand::query()->delete();
-                ProductCategory::query()->delete();
+                DB::table('products')->truncate();
+                DB::table('taxes')->truncate();
+                DB::table('units')->truncate();
+                DB::table('product_brands')->truncate();
+                DB::table('product_categories')->truncate();
 
                 // Restore in order (dependencies first)
                 if (isset($data['tables']['product_categories'])) {
