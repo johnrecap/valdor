@@ -110,45 +110,49 @@ class BackupService
 
             $restored = [];
 
-            // Disable foreign key checks to allow truncation
+            // Disable foreign key checks for the entire restore operation
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-            // Clear tables before restore (in reverse dependency order)
-            Product::query()->delete();
-            Tax::query()->delete();
-            Unit::query()->delete();
-            ProductBrand::query()->delete();
-            ProductCategory::query()->delete();
+            try {
+                // Clear tables before restore (in reverse dependency order)
+                Product::query()->delete();
+                Tax::query()->delete();
+                Unit::query()->delete();
+                ProductBrand::query()->delete();
+                ProductCategory::query()->delete();
 
-            // Re-enable foreign key checks
-            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+                // Restore in order (dependencies first)
+                if (isset($data['tables']['product_categories'])) {
+                    $restored['product_categories'] = $this->restoreProductCategories($data['tables']['product_categories']);
+                }
+                if (isset($data['tables']['product_brands'])) {
+                    $restored['product_brands'] = $this->restoreProductBrands($data['tables']['product_brands']);
+                }
+                if (isset($data['tables']['units'])) {
+                    $restored['units'] = $this->restoreUnits($data['tables']['units']);
+                }
+                if (isset($data['tables']['taxes'])) {
+                    $restored['taxes'] = $this->restoreTaxes($data['tables']['taxes']);
+                }
+                if (isset($data['tables']['products'])) {
+                    $restored['products'] = $this->restoreProducts($data['tables']['products']);
+                }
+                if (isset($data['tables']['settings'])) {
+                    $restored['settings'] = $this->restoreSettings($data['tables']['settings']);
+                }
 
-            // Restore in order (dependencies first)
-            if (isset($data['tables']['product_categories'])) {
-                $restored['product_categories'] = $this->restoreProductCategories($data['tables']['product_categories']);
+                return [
+                    'success' => true,
+                    'restored' => $restored,
+                    'backup_date' => $data['created_at']
+                ];
+            } finally {
+                // Always re-enable foreign key checks
+                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
             }
-            if (isset($data['tables']['product_brands'])) {
-                $restored['product_brands'] = $this->restoreProductBrands($data['tables']['product_brands']);
-            }
-            if (isset($data['tables']['units'])) {
-                $restored['units'] = $this->restoreUnits($data['tables']['units']);
-            }
-            if (isset($data['tables']['taxes'])) {
-                $restored['taxes'] = $this->restoreTaxes($data['tables']['taxes']);
-            }
-            if (isset($data['tables']['products'])) {
-                $restored['products'] = $this->restoreProducts($data['tables']['products']);
-            }
-            if (isset($data['tables']['settings'])) {
-                $restored['settings'] = $this->restoreSettings($data['tables']['settings']);
-            }
-
-            return [
-                'success' => true,
-                'restored' => $restored,
-                'backup_date' => $data['created_at']
-            ];
         } catch (\Exception $e) {
+            // Ensure FK checks are re-enabled even on error
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
             Log::error('Restore failed: ' . $e->getMessage());
             return [
                 'success' => false,
