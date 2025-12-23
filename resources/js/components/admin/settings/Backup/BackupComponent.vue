@@ -122,7 +122,7 @@
 <script>
 import LoadingComponent from "../../components/LoadingComponent.vue";
 import alertService from "../../../../services/alertService";
-import appService from "../../../../services/appService";
+import axios from "axios";
 
 export default {
     name: "BackupComponent",
@@ -143,7 +143,7 @@ export default {
         async fetchBackups() {
             try {
                 this.loading.isActive = true;
-                const response = await appService.get('/api/admin/setting/backup');
+                const response = await axios.get('/api/admin/setting/backup');
                 if (response.data.status) {
                     this.backups = response.data.data;
                 }
@@ -157,7 +157,7 @@ export default {
         async createBackup() {
             try {
                 this.loading.isActive = true;
-                const response = await appService.post('/api/admin/setting/backup');
+                const response = await axios.post('/api/admin/setting/backup');
                 if (response.data.status) {
                     alertService.success(this.$t("backup.created_success"));
                     this.fetchBackups();
@@ -180,7 +180,7 @@ export default {
             try {
                 this.showRestoreModal = false;
                 this.loading.isActive = true;
-                const response = await appService.post('/api/admin/setting/backup/restore', {
+                const response = await axios.post('/api/admin/setting/backup/restore', {
                     filename: this.selectedBackup.filename
                 });
                 if (response.data.status) {
@@ -204,7 +204,7 @@ export default {
             try {
                 this.showDeleteModal = false;
                 this.loading.isActive = true;
-                const response = await appService.delete(`/api/admin/setting/backup/${this.selectedBackup.filename}`);
+                const response = await axios.delete(`/api/admin/setting/backup/${this.selectedBackup.filename}`);
                 if (response.data.status) {
                     alertService.success(this.$t("backup.deleted_success"));
                     this.fetchBackups();
