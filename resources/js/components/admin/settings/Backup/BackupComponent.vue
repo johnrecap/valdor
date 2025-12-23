@@ -143,7 +143,7 @@ export default {
         async fetchBackups() {
             try {
                 this.loading.isActive = true;
-                const response = await axios.get('/api/admin/setting/backup');
+                const response = await axios.get('/api/admin/backup');
                 if (response.data.status) {
                     this.backups = response.data.data;
                 }
@@ -157,7 +157,7 @@ export default {
         async createBackup() {
             try {
                 this.loading.isActive = true;
-                const response = await axios.post('/api/admin/setting/backup');
+                const response = await axios.post('/api/admin/backup');
                 if (response.data.status) {
                     alertService.success(this.$t("backup.created_success"));
                     this.fetchBackups();
@@ -180,7 +180,7 @@ export default {
             try {
                 this.showRestoreModal = false;
                 this.loading.isActive = true;
-                const response = await axios.post('/api/admin/setting/backup/restore', {
+                const response = await axios.post('/api/admin/backup/restore', {
                     filename: this.selectedBackup.filename
                 });
                 if (response.data.status) {
@@ -204,7 +204,7 @@ export default {
             try {
                 this.showDeleteModal = false;
                 this.loading.isActive = true;
-                const response = await axios.delete(`/api/admin/setting/backup/${this.selectedBackup.filename}`);
+                const response = await axios.delete(`/api/admin/backup/${this.selectedBackup.filename}`);
                 if (response.data.status) {
                     alertService.success(this.$t("backup.deleted_success"));
                     this.fetchBackups();
@@ -219,7 +219,7 @@ export default {
         },
 
         downloadBackup(filename) {
-            window.open(`/api/admin/setting/backup/download/${filename}`, '_blank');
+            window.open(`/api/admin/backup/download/${filename}`, '_blank');
         },
 
         formatDate(dateStr) {
