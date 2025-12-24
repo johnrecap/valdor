@@ -24,20 +24,20 @@
                         </div>
 
                         <div class="form-col-12 sm:form-col-6">
-                            <label class="db-field-title" for="latitude">{{ $t("label.latitude") }}/{{
-                                $t("label.longitude")
-                                }}</label>
-                            <div class="db-multiple-field">
-                                <input v-model="props.form.latitude" v-bind:class="errors.latitude ? 'invalid' : ''
-                                    " type="text" id="latitude" />
-                                <input v-model="props.form.longitude" v-bind:class="errors.longitude ? 'invalid' : ''
-                                    " type="text" id="longitude" />
-                                <button @click="add" v-on:click="isMap = true" type="button"
-                                    class="fa-solid fa-map-location-dot" data-modal="#deliveryZoneMap"></button>
-                            </div>
-
-                            <small class="db-field-alert" v-if="errors.latitude">{{ errors.latitude[0] }}</small>
-                            <small class="db-field-alert" v-if="errors.longitude">{{ errors.longitude[0] }}</small>
+                            <label for="governorate_name" class="db-field-title required">
+                                {{ $t("label.governorate") }}
+                            </label>
+                            <select 
+                                v-model="props.form.governorate_name" 
+                                v-bind:class="errors.governorate_name ? 'invalid' : ''"
+                                id="governorate_name" 
+                                class="db-field-control">
+                                <option value="">{{ $t("label.select_governorate") }}</option>
+                                <option v-for="gov in governorates" :key="gov" :value="gov">{{ gov }}</option>
+                            </select>
+                            <small class="db-field-alert" v-if="errors.governorate_name">
+                                {{ errors.governorate_name[0] }}
+                            </small>
                         </div>
 
                         <div class="form-col-12 sm:form-col-6">
@@ -62,26 +62,18 @@
                         </div>
 
                         <div class="form-col-12 sm:form-col-6">
-                            <label for="delivery_radius_kilometer" class="db-field-title required">{{
-                                $t("label.delivery_radius_kilometer")
-                                }}</label>
-                            <input v-model="props.form.delivery_radius_kilometer"
-                                v-bind:class="errors.delivery_radius_kilometer ? 'invalid' : ''" type="text"
-                                id="delivery_radius_kilometer" class="db-field-control" />
-                            <small class="db-field-alert" v-if="errors.delivery_radius_kilometer">{{
-                                errors.delivery_radius_kilometer[0]
-                                }}</small>
-                        </div>
-
-                        <div class="form-col-12 sm:form-col-6">
-                            <label for="delivery_charge_per_kilo" class="db-field-title required">{{
-                                $t("label.delivery_charge_per_kilo") }}</label>
-                            <input v-model="props.form.delivery_charge_per_kilo"
-                                v-bind:class="errors.delivery_charge_per_kilo ? 'invalid' : ''" type="text"
-                                id="delivery_charge_per_kilo" class="db-field-control" />
-                            <small class="db-field-alert" v-if="errors.delivery_charge_per_kilo">{{
-                                errors.delivery_charge_per_kilo[0]
-                                }}</small>
+                            <label for="delivery_fee" class="db-field-title required">
+                                {{ $t("label.delivery_fee") }}
+                            </label>
+                            <input 
+                                v-model="props.form.delivery_fee"
+                                v-bind:class="errors.delivery_fee ? 'invalid' : ''" 
+                                type="text"
+                                id="delivery_fee" 
+                                class="db-field-control" />
+                            <small class="db-field-alert" v-if="errors.delivery_fee">
+                                {{ errors.delivery_fee[0] }}
+                            </small>
                         </div>
 
                         <div class="form-col-12 sm:form-col-6">
@@ -196,6 +188,15 @@ export default {
             isMap: false,
             address: "",
             errors: {},
+            governorates: [
+                'القاهرة', 'الجيزة', 'الإسكندرية', 'القليوبية',
+                'الشرقية', 'الدقهلية', 'البحيرة', 'كفر الشيخ',
+                'الغربية', 'المنوفية', 'دمياط', 'بورسعيد',
+                'الإسماعيلية', 'السويس', 'شمال سيناء', 'جنوب سيناء',
+                'المنيا', 'بني سويف', 'الفيوم', 'أسيوط',
+                'سوهاج', 'قنا', 'الأقصر', 'أسوان',
+                'البحر الأحمر', 'الوادي الجديد', 'مطروح'
+            ]
         };
     },
     computed: {
@@ -217,18 +218,38 @@ export default {
             composables.closeModal('modal');
             this.$store.dispatch("deliveryZone/reset").then().catch();
             this.errors = {};
-            this.$props.props.form = {
-                name: "",
-                email: "",
-                phone: "",
-                latitude: "",
-                longitude: "",
-                delivery_radius_kilometer: "",
-                delivery_charge_per_kilo: "",
-                minimum_order_amount: "",
-                address: "",
-                status: statusEnum.ACTIVE,
-            };
+            if (this.props && this.props.form) {
+                this.props.form = {
+                    name: "",
+                    governorate_name: "",
+                    email: "",
+                    phone: "",
+                    latitude: "",
+                    longitude: "",
+                    delivery_radius_kilometer: "",
+                    delivery_charge_per_kilo: "",
+                    delivery_fee: "",
+                    minimum_order_amount: "",
+                    address: "",
+                    status: statusEnum.ACTIVE,
+                };
+            }
+            if (this.$props && this.$props.props && this.$props.props.form) {
+             this.$props.props.form = {
+                    name: "",
+                    governorate_name: "",
+                    email: "",
+                    phone: "",
+                    latitude: "",
+                    longitude: "",
+                    delivery_radius_kilometer: "",
+                    delivery_charge_per_kilo: "",
+                    delivery_fee: "",
+                    minimum_order_amount: "",
+                    address: "",
+                    status: statusEnum.ACTIVE,
+                };
+            }
             this.isMap = false;
         },
         phoneNumber(e) {
@@ -252,12 +273,14 @@ export default {
                     );
                     this.props.form = {
                         name: "",
+                        governorate_name: "",
                         email: "",
                         phone: "",
                         latitude: "",
                         longitude: "",
                         delivery_radius_kilometer: "",
                         delivery_charge_per_kilo: "",
+                        delivery_fee: "",
                         minimum_order_amount: "",
                         address: "",
                         status: statusEnum.ACTIVE,

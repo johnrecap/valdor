@@ -65,6 +65,10 @@ return [
         'total_return_price'         => 'إجمالي سعر الإرجاع',
         'source'                     => 'المصدر',
         'zone_name'                  => 'اسم المنطقة',
+        'governorate'                => 'المحافظة',
+        'select_governorate'         => 'اختر المحافظة',
+        'delivery_fee'               => 'رسوم التوصيل',
+        'currency_delivery_fee'      => 'رسوم التوصيل',
         // InstaPay Labels
         'instapay_api_key'           => 'مفتاح API لـ InstaPay',
         'instapay_merchant_code'     => 'كود التاجر InstaPay',

@@ -124,19 +124,40 @@ class DeliveryZoneService
     public function deliveryZoneCheck(Request $request)
     {
         try {
-            if ($request->latitude && $request->longitude) {
-                $deliveryZones = DeliveryZone::where('status', Status::ACTIVE)->get();
-                foreach ($deliveryZones as $zone) {
-                    $distance = $this->distanceCalculation($request->latitude, $request->longitude, $zone->latitude, $zone->longitude);
-                    if ($distance <= $zone->delivery_radius_kilometer) {
-                        return $zone;
+            // CHANGED: New logic to check by governorate first
+            $addressId = $request->address_id ?? $request->id;  // Support both field names
+
+            if ($addressId) {
+                // Use the Address model (assuming App\Models\Address)
+                $address = \App\Models\Address::find($addressId);
+                if ($address && $address->governorate) {
+                    // Find delivery zone for this specific governorate
+                    $deliveryZone = DeliveryZone::where('governorate_name', $address->governorate)
+                        ->where('status', Status::ACTIVE)
+                        ->first();
+
+                    if ($deliveryZone) {
+                        return $deliveryZone;
                     }
                 }
-                throw new Exception(trans('all.message.out_of_delivery_zone'), 422);
-            } else {
-
-                throw new Exception(trans('all.message.out_of_delivery_zone'), 422);
             }
+
+            // Fallback 1: General Zone (null governorate_name = serves all areas)
+            $deliveryZone = DeliveryZone::where('status', Status::ACTIVE)
+                ->whereNull('governorate_name')
+                ->first();
+
+            if ($deliveryZone) {
+                return $deliveryZone;
+            }
+
+            // Fallback 2: Any active zone
+            $deliveryZone = DeliveryZone::where('status', Status::ACTIVE)->first();
+            if ($deliveryZone) {
+                return $deliveryZone;
+            }
+
+            throw new Exception(trans('all.message.out_of_delivery_zone'), 422);
         } catch (Exception $exception) {
             Log::info($exception->getMessage());
             throw new Exception(QueryExceptionLibrary::message($exception), 422);

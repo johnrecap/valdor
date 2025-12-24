@@ -64,7 +64,11 @@ return [
         "reason"                     => "Reason",
         "total_return_price"         => "Total Return Price",
         "source"                     => "Source",
-        "zone_name"                  => "Zone Name"
+        "zone_name"                  => "Zone Name",
+        "governorate"                => "Governorate",
+        "select_governorate"         => "Select Governorate",
+        "delivery_fee"               => "Delivery Fee",
+        "currency_delivery_fee"      => "Delivery Fee",
     ],
     'message' => [
         'validation_error'                 => 'Validation Error.',
