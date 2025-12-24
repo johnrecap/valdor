@@ -173,14 +173,14 @@ class FrontendOrderService
                         OrderAddress::create([
                             'order_id'        => $this->order->id,
                             'user_id'         => Auth::user()->id,
-                            'label'           => $address->label ?? $request->label,
-                            'governorate'     => $address->governorate ?? $request->governorate,
-                            'city'            => $address->city ?? $request->city,
-                            'street'          => $address->street ?? $request->street,
-                            'building_number' => $address->building_number ?? $request->building_number,
-                            'apartment'       => $address->apartment ?? $request->apartment,
-                            'full_address'    => $address->full_address ?? $request->full_address,
-                            'phone'           => $address->phone ?? $request->phone
+                            'label'           => $address->label ?? $request->label ?? 'عنوان التوصيل',
+                            'governorate'     => $address->governorate ?? $request->governorate ?? '',
+                            'city'            => $address->city ?? $request->city ?? '',
+                            'street'          => $address->street ?? $request->street ?? '',
+                            'building_number' => $address->building_number ?? $request->building_number ?? '',
+                            'apartment'       => $address->apartment ?? $request->apartment ?? '',
+                            'full_address'    => $address->full_address ?? $request->full_address ?? $address->address ?? '',
+                            'phone'           => $address->phone ?? $request->phone ?? ''
                         ]);
                     }
                 } elseif ($request->order_type == OrderType::PICK_UP) {
