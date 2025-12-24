@@ -10,15 +10,32 @@ class Address extends Model
     use HasFactory;
 
     protected $table = "addresses";
-    protected $fillable    = ['label', 'address', 'user_id', 'apartment', 'latitude', 'longitude'];
+    protected $fillable = [
+        'label',
+        'user_id',
+        'governorate',
+        'city',
+        'street',
+        'building_number',
+        'apartment',
+        'phone',
+        'address',
+        'latitude',
+        'longitude'
+    ];
     protected $casts = [
-        'id'        => 'integer',
-        'label'     => 'string',
-        'address'   => 'string',
-        'user_id'   => 'integer',
-        'apartment' => 'string',
-        'latitude'  => 'string',
-        'longitude' => 'string',
+        'id'              => 'integer',
+        'label'           => 'string',
+        'user_id'         => 'integer',
+        'governorate'     => 'string',
+        'city'            => 'string',
+        'street'          => 'string',
+        'building_number' => 'string',
+        'apartment'       => 'string',
+        'phone'           => 'string',
+        'address'         => 'string',
+        'latitude'        => 'string',
+        'longitude'       => 'string',
     ];
 
     public function user()

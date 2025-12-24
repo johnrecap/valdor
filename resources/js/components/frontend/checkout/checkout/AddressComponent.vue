@@ -10,7 +10,7 @@
                     <i class="lab-fill-edit"></i>
                     <span class="text-sm font-medium capitalize whitespace-nowrap">{{ $t('button.edit') }}</span>
                 </button>
-                <button data-modal="#checkoutAddress" @click="add" v-on:click="this.address.isMap = true" type="button"
+                <button data-modal="#checkoutAddress" @click="add" type="button"
                     class="px-3 h-8 leading-8 rounded-full flex items-center gap-2 bg-primary/10 text-primary">
                     <i class="lab-fill-circle-plus"></i>
                     <span class="text-sm font-medium capitalize whitespace-nowrap">{{ $t('button.add_new') }}</span>
@@ -27,8 +27,10 @@
                         {{ address.label }} </h3>
                 </div>
                 <p class="text-sm leading-6">
-                    {{ address.apartment ? address.apartment + ', ' : '' }}
-                    {{ address.address }}
+                    {{ address.governorate ? address.governorate + ', ' : '' }}
+                    {{ address.city ? address.city + ', ' : '' }}
+                    {{ address.street ? address.street : '' }}
+                    {{ address.building_number ? ' - ' + address.building_number : '' }}
                 </p>
             </div>
         </div>
@@ -43,19 +45,64 @@
             </div>
             <div class="modal-body">
                 <form @submit.prevent="save">
-                    <MapComponent :key="mapKey" v-if="address.isMap"
-                        :location="{ lat: address.form.latitude, lng: address.form.longitude }" :position="location" />
-                    <div class="flex items-center gap-2 mb-3">
-                        <i class="lab lab-fill-location text-xl text-primary"></i>
-                        <span class="text-sm text-heading">{{ address.form.address }}</span>
+                    <!-- Governorate Selection -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.governorate') }} *</label>
+                        <select v-model="address.form.governorate" 
+                            v-bind:class="errors.governorate ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                            <option value="">{{ $t('label.select_governorate') }}</option>
+                            <option v-for="gov in governorates" :key="gov" :value="gov">{{ gov }}</option>
+                        </select>
+                        <small class="db-field-alert" v-if="errors.governorate">{{ errors.governorate[0] }}</small>
                     </div>
+
+                    <!-- City -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.city') }}</label>
+                        <input type="text" v-model="address.form.city"
+                            v-bind:class="errors.city ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                        <small class="db-field-alert" v-if="errors.city">{{ errors.city[0] }}</small>
+                    </div>
+
+                    <!-- Street -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.street') }}</label>
+                        <input type="text" v-model="address.form.street"
+                            v-bind:class="errors.street ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                        <small class="db-field-alert" v-if="errors.street">{{ errors.street[0] }}</small>
+                    </div>
+
+                    <!-- Building Number -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.building_number') }}</label>
+                        <input type="text" v-model="address.form.building_number"
+                            v-bind:class="errors.building_number ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                        <small class="db-field-alert" v-if="errors.building_number">{{ errors.building_number[0] }}</small>
+                    </div>
+
+                    <!-- Apartment -->
                     <div class="mb-3">
                         <label for="apartment" class="text-xs leading-6 capitalize mb-1 text-heading">{{
                             $t('label.apartment_and_flat')
                             }}</label>
-                        <textarea id="apartment" v-model="address.form.apartment"
-                            class="h-12 w-full rounded-lg border py-1.5 px-2 placeholder:text-[10px] placeholder:text-[#6E7191] border-[#D9DBE9]"></textarea>
+                        <input type="text" id="apartment" v-model="address.form.apartment"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
                     </div>
+
+                    <!-- Phone -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.phone') }}</label>
+                        <input type="text" v-model="address.form.phone"
+                            v-bind:class="errors.phone ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                        <small class="db-field-alert" v-if="errors.phone">{{ errors.phone[0] }}</small>
+                    </div>
+
+                    <!-- Label Selection -->
                     <div class="mb-6">
                         <h3 class="capitalize font-medium mb-2">{{ $t('label.add_label') }}</h3>
                         <nav class="flex flex-wrap gap-3 active-group">
@@ -118,12 +165,11 @@ import labelEnum from "../../../../enums/modules/labelEnum";
 import appService from "../../../../services/appService";
 import alertService from "../../../../services/alertService";
 import LoadingComponent from "../../components/LoadingComponent.vue";
-import MapComponent from "../../components/MapComponent.vue";
 
 
 export default {
     name: "AddressComponent",
-    components: { LoadingComponent, MapComponent },
+    components: { LoadingComponent },
     props: {
         "show": { type: Boolean, Default: false },
         "selectedAddress": { type: Object },
@@ -134,15 +180,16 @@ export default {
             loading: {
                 isActive: false
             },
-            mapKey: "create-update",
             orderTypeEnum: orderTypeEnum,
             labelEnum: labelEnum,
             address: {
                 form: {
-                    address: "",
+                    governorate: "",
+                    city: "",
+                    street: "",
+                    building_number: "",
                     apartment: "",
-                    latitude: "",
-                    longitude: "",
+                    phone: "",
                     label: "",
                 },
                 search: {
@@ -153,10 +200,18 @@ export default {
                 },
                 status: false,
                 switchLabel: "",
-                isMap: false,
             },
             activeAddressId: null,
             errors: {},
+            governorates: [
+                'القاهرة', 'الجيزة', 'الإسكندرية', 'القليوبية',
+                'الشرقية', 'الدقهلية', 'البحيرة', 'كفر الشيخ',
+                'الغربية', 'المنوفية', 'دمياط', 'بورسعيد',
+                'الإسماعيلية', 'السويس', 'شمال سيناء', 'جنوب سيناء',
+                'المنيا', 'بني سويف', 'الفيوم', 'أسيوط',
+                'سوهاج', 'قنا', 'الأقصر', 'أسوان',
+                'البحر الأحمر', 'الوادي الجديد', 'مطروح'
+            ]
         }
     },
     computed: {
@@ -183,7 +238,6 @@ export default {
     },
     methods: {
         add: function () {
-            this.address.isMap = true;
             appService.modalShow("#checkoutAddress");
         },
         changeSwitchLabel: function (id) {
@@ -194,20 +248,16 @@ export default {
             this.$store.dispatch("frontendAddress/reset").then().catch();
             this.errors = {};
             this.address.form = {
-                address: "",
+                governorate: "",
+                city: "",
+                street: "",
+                building_number: "",
                 apartment: "",
-                latitude: "",
-                longitude: "",
+                phone: "",
                 label: "",
             };
             this.address.status = false;
             this.address.switchLabel = "";
-            this.address.isMap = false;
-        },
-        location: function (e) {
-            this.address.form.latitude = e.location.lat;
-            this.address.form.longitude = e.location.lng;
-            this.address.form.address = e.address;
         },
         activeAddress: function (address) {
             this.activeAddressId = address.id;
@@ -222,10 +272,12 @@ export default {
                     this.loading.isActive = false;
                     alertService.successFlip(tempId === null ? 0 : 1, this.$t("label.address"));
                     this.address.form = {
-                        address: "",
+                        governorate: "",
+                        city: "",
+                        street: "",
+                        building_number: "",
                         apartment: "",
-                        latitude: "",
-                        longitude: "",
+                        phone: "",
                         label: "",
                     };
                     this.errors = {};
@@ -244,14 +296,14 @@ export default {
             this.loading.isActive = true;
             this.$store.dispatch("frontendAddress/edit", address.id).then((res) => {
                 this.loading.isActive = false;
-                this.address.isMap = true;
                 this.address.form = {
-                    address: address.address,
+                    governorate: address.governorate,
+                    city: address.city,
+                    street: address.street,
+                    building_number: address.building_number,
                     apartment: address.apartment,
-                    latitude: address.latitude,
-                    longitude: address.longitude,
+                    phone: address.phone,
                     label: address.label,
-
                 };
                 if (this.address.form.label === this.$t("label.home")) {
                     this.address.status = false;
