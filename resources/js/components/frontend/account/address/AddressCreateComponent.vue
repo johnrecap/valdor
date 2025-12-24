@@ -1,6 +1,6 @@
 <template>
     <LoadingComponent :props="loading" />
-    <button data-modal="#address"  @click="add" v-on:click="this.props.isMap = true" type="button"
+    <button data-modal="#address"  @click="add" type="button"
         class="w-full rounded-2xl py-10 flex items-center justify-center gap-2.5 text-primary bg-[#E7FFF3]">
         <i class="lab-fill-circle-plus text-lg"></i>
         <span class="text-lg font-semibold capitalize">{{ addButton.title }}</span>
@@ -15,19 +15,64 @@
             </div>
             <div class="modal-body">
                 <form @submit.prevent="save">
-                    <MapComponent :key="mapKey" v-if="props.isMap"
-                        :location="{ lat: props.form.latitude, lng: props.form.longitude }" :position="location" />
-                    <div class="flex items-center gap-2 mb-3">
-                        <i class="lab lab-fill-location text-xl text-primary"></i>
-                        <span class="text-sm text-heading">{{ props.form.address }}</span>
+                    <!-- Governorate Selection -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.governorate') }} *</label>
+                        <select v-model="props.form.governorate" 
+                            v-bind:class="errors.governorate ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                            <option value="">{{ $t('label.select_governorate') }}</option>
+                            <option v-for="gov in governorates" :key="gov" :value="gov">{{ gov }}</option>
+                        </select>
+                        <small class="db-field-alert" v-if="errors.governorate">{{ errors.governorate[0] }}</small>
                     </div>
+
+                    <!-- City -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.city') }}</label>
+                        <input type="text" v-model="props.form.city"
+                            v-bind:class="errors.city ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                        <small class="db-field-alert" v-if="errors.city">{{ errors.city[0] }}</small>
+                    </div>
+
+                    <!-- Street -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.street') }}</label>
+                        <input type="text" v-model="props.form.street"
+                            v-bind:class="errors.street ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                        <small class="db-field-alert" v-if="errors.street">{{ errors.street[0] }}</small>
+                    </div>
+
+                    <!-- Building Number -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.building_number') }}</label>
+                        <input type="text" v-model="props.form.building_number"
+                            v-bind:class="errors.building_number ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                        <small class="db-field-alert" v-if="errors.building_number">{{ errors.building_number[0] }}</small>
+                    </div>
+
+                    <!-- Apartment -->
                     <div class="mb-3">
                         <label for="apartment" class="text-xs leading-6 capitalize mb-1 text-heading">{{
                             $t('label.apartment_and_flat')
                         }}</label>
-                        <textarea id="apartment" v-model="props.form.apartment"
-                            class="h-12 w-full rounded-lg border py-1.5 px-2 placeholder:text-[10px] placeholder:text-[#6E7191] border-[#D9DBE9]"></textarea>
+                        <input type="text" id="apartment" v-model="props.form.apartment"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
                     </div>
+
+                    <!-- Phone -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.phone') }}</label>
+                        <input type="text" v-model="props.form.phone"
+                            v-bind:class="errors.phone ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                        <small class="db-field-alert" v-if="errors.phone">{{ errors.phone[0] }}</small>
+                    </div>
+
+                    <!-- Label Selection -->
                     <div class="mb-6">
                         <h3 class="capitalize font-medium mb-2">{{ $t('label.add_label') }}</h3>
                         <nav class="flex flex-wrap gap-3 active-group">
@@ -84,14 +129,13 @@
 <script>
 import AddressCreateModalComponent from "../../components/buttons/AddressCreateModalComponent.vue";
 import labelEnum from "../../../../enums/modules/labelEnum";
-import MapComponent from "../../components/MapComponent.vue";
 import appService from "../../../../services/appService";
 import alertService from "../../../../services/alertService";
 import LoadingComponent from "../../components/LoadingComponent.vue";
 
 export default {
     name: "AddressComponent",
-    components: { AddressCreateModalComponent, MapComponent, LoadingComponent },
+    components: { AddressCreateModalComponent, LoadingComponent },
     props: {
         props: Object,
         getLocation: Function
@@ -101,10 +145,18 @@ export default {
             loading: {
                 isActive: false,
             },
-            mapKey: "create-update",
             labelEnum: labelEnum,
             switchLabel: "",
             errors: {},
+            governorates: [
+                'القاهرة', 'الجيزة', 'الإسكندرية', 'القليوبية',
+                'الشرقية', 'الدقهلية', 'البحيرة', 'كفر الشيخ',
+                'الغربية', 'المنوفية', 'دمياط', 'بورسعيد',
+                'الإسماعيلية', 'السويس', 'شمال سيناء', 'جنوب سيناء',
+                'المنيا', 'بني سويف', 'الفيوم', 'أسيوط',
+                'سوهاج', 'قنا', 'الأقصر', 'أسوان',
+                'البحر الأحمر', 'الوادي الجديد', 'مطروح'
+            ]
         }
     },
     computed: {
@@ -119,25 +171,21 @@ export default {
         changeSwitchLabel: function (id) {
             this.props.switchLabel = id;
         },
-        location: function (e) {
-            this.props.form.latitude = e.location.lat;
-            this.props.form.longitude = e.location.lng;
-            this.props.form.address = e.address;
-        },
         reset: function () {
             appService.modalHide();
             this.$store.dispatch("frontendAddress/reset").then().catch();
             this.errors = {};
             this.$props.props.form = {
-                address: "",
+                governorate: "",
+                city: "",
+                street: "",
+                building_number: "",
                 apartment: "",
-                latitude: "",
-                longitude: "",
+                phone: "",
                 label: "",
             };
             this.$props.props.status = false;
             this.$props.props.switchLabel = "";
-            this.$props.props.isMap = false;
         },
         save: function () {
             try {
@@ -149,13 +197,14 @@ export default {
                     this.loading.isActive = false;
                     alertService.successFlip(tempId === null ? 0 : 1, this.$t("label.address"));
                     this.props.form = {
-                        address: "",
+                        governorate: "",
+                        city: "",
+                        street: "",
+                        building_number: "",
                         apartment: "",
-                        latitude: "",
-                        longitude: "",
+                        phone: "",
                         label: "",
                     };
-                    this.props.isMap = false;
                     this.props.status = false;
                     this.props.switchLabel = "";
                     this.errors = {};
@@ -171,3 +220,4 @@ export default {
     }
 }
 </script>
+

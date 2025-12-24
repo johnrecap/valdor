@@ -69,6 +69,9 @@ return [
         "select_governorate"         => "Select Governorate",
         "delivery_fee"               => "Delivery Fee",
         "currency_delivery_fee"      => "Delivery Fee",
+        "city"                       => "City",
+        "street"                     => "Street",
+        "building_number"            => "Building Number",
     ],
     'message' => [
         'validation_error'                 => 'Validation Error.',

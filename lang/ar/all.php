@@ -69,6 +69,9 @@ return [
         'select_governorate'         => 'اختر المحافظة',
         'delivery_fee'               => 'رسوم التوصيل',
         'currency_delivery_fee'      => 'رسوم التوصيل',
+        'city'                       => 'المدينة',
+        'street'                     => 'الشارع',
+        'building_number'            => 'رقم المبنى',
         // InstaPay Labels
         'instapay_api_key'           => 'مفتاح API لـ InstaPay',
         'instapay_merchant_code'     => 'كود التاجر InstaPay',
