@@ -10,7 +10,7 @@
                 <div class="flex items-center flex-shrink-0 gap-5">
                     <button @click.prevent="showTarget('mobile-sidebar-canvas', 'canvas-active')" type="button"
                         class="leading-none block lg:hidden">
-                        <i class="lab-line-humburger text-xl"></i>
+                        <i class="lab-line-humburger text-xl text-primary"></i>
                     </button>
                     <RouterLink to="/" class="flex-shrink-0">
                         <img class="h-10 sm:h-12 w-auto max-w-[160px] object-contain" :src="setting.theme_logo" alt="logo">
@@ -18,7 +18,7 @@
                 </div>
                 <button type="button" @click.prevent="showTarget('search', 'search-active')"
                     class="leading-none block lg:hidden">
-                    <i class="lab-line-search text-xl"></i>
+                    <i class="lab-line-search text-xl text-primary"></i>
                 </button>
                 <form @submit.prevent="search()"
                     class="w-full max-w-md h-10 group rounded-3xl hidden lg:flex items-center gap-2 px-4 border border-gray-700 bg-[#1a1a1a] transition-all duration-300 focus-within:border-primary focus-within:bg-[#0a0a0a]">
