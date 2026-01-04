@@ -181,7 +181,9 @@ class FrontendOrderService
                             'apartment'       => $address->apartment ?? $request->apartment ?? '',
                             'full_address'    => $address->full_address ?? $request->full_address ?? $address->address ?? '',
                             'address'         => $address->address ?? $address->full_address ?? $request->address ?? '',
-                            'phone'           => $address->phone ?? $request->phone ?? ''
+                            'phone'           => $address->phone ?? $request->phone ?? '',
+                            'latitude'        => $address->latitude ?? $request->latitude ?? '',
+                            'longitude'       => $address->longitude ?? $request->longitude ?? ''
                         ]);
                     }
                 } elseif ($request->order_type == OrderType::PICK_UP) {
