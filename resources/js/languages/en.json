@@ -695,7 +695,11 @@
                 "instapay_status": "InstaPay Status",
                 "mada_phone_number": "Mada Phone Number",
                 "mada_account_name": "Mada Account Name",
-                "mada_status": "Mada Status"
+                "mada_status": "Mada Status",
+                "governorate": "Governorate",
+                "select_governorate": "Select Governorate",
+                "street": "Street",
+                "building_number": "Building Number"
         },
         "button": {
                 "add": "Add",

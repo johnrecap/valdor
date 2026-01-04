@@ -694,7 +694,11 @@
         "instapay_status": "حالة InstaPay",
         "mada_phone_number": "رقم تليفون Mada",
         "mada_account_name": "اسم حساب Mada",
-        "mada_status": "حالة Mada"
+        "mada_status": "حالة Mada",
+        "governorate": "المحافظة",
+        "select_governorate": "اختر المحافظة",
+        "street": "الشارع",
+        "building_number": "رقم المبنى"
     },
     "button": {
         "add": "إضافة",
