@@ -180,6 +180,7 @@ class FrontendOrderService
                             'building_number' => $address->building_number ?? $request->building_number ?? '',
                             'apartment'       => $address->apartment ?? $request->apartment ?? '',
                             'full_address'    => $address->full_address ?? $request->full_address ?? $address->address ?? '',
+                            'address'         => $address->address ?? $address->full_address ?? $request->address ?? '',
                             'phone'           => $address->phone ?? $request->phone ?? ''
                         ]);
                     }

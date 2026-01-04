@@ -21,6 +21,7 @@ class OrderAddress extends Model
         'apartment',
         'full_address',
         'phone',
+        'address',
         'latitude',
         'longitude'
     ];
