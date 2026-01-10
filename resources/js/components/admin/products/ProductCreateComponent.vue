@@ -384,9 +384,10 @@ export default {
 
         this.$store.dispatch('productCategory/depthTrees', {
         }).then((res) => {
-            this.productCategories = res.data.data;
+            this.productCategories = res?.data?.data || [];
             this.loading.isActive = false;
         }).catch((error) => {
+            this.productCategories = [];
             this.loading.isActive = false;
         });
 
@@ -395,9 +396,10 @@ export default {
             order_column: 'id',
             order_type: 'asc'
         }).then((res) => {
-            this.productBrands = res.data.data;
+            this.productBrands = res?.data?.data || [];
             this.loading.isActive = false;
         }).catch((error) => {
+            this.productBrands = [];
             this.loading.isActive = false;
         });
 
@@ -406,9 +408,10 @@ export default {
             order_column: 'id',
             order_type: 'asc'
         }).then((res) => {
-            this.units = res.data.data;
+            this.units = res?.data?.data || [];
             this.loading.isActive = false;
         }).catch((error) => {
+            this.units = [];
             this.loading.isActive = false;
         });
 
@@ -417,9 +420,10 @@ export default {
             order_column: 'id',
             order_type: 'asc'
         }).then((res) => {
-            this.taxes = res.data.data;
+            this.taxes = res?.data?.data || [];
             this.loading.isActive = false;
         }).catch((error) => {
+            this.taxes = [];
             this.loading.isActive = false;
         });
 
@@ -428,9 +432,10 @@ export default {
             order_column: 'id',
             order_type: 'asc'
         }).then((res) => {
-            this.barcodes = res.data.data;
+            this.barcodes = res?.data?.data || [];
             this.loading.isActive = false;
         }).catch((error) => {
+            this.barcodes = [];
             this.loading.isActive = false;
         });
     },
@@ -520,7 +525,7 @@ export default {
                     this.errors = {};
                 }).catch((err) => {
                     this.loading.isActive = false;
-                    this.errors = err.response.data.errors;
+                    this.errors = err?.response?.data?.errors || {};
                 })
             } catch (err) {
                 this.loading.isActive = false;
