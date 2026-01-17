@@ -33,7 +33,8 @@ class Order extends Model implements HasMedia
         'edited_amount',
         'edited_date',
         'source',
-        'delivery_boy_id'
+        'delivery_boy_id',
+        'active'
     ];
 
     protected $casts = [

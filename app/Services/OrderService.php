@@ -71,6 +71,9 @@ class OrderService
             $orderColumn = $request->get('order_column') ?? 'id';
             $orderType = $request->get('order_by') ?? 'desc';
 
+            // DEBUG: Log request parameters
+            Log::info('OrderService::list - Request params:', $requests);
+
             return Order::with('transaction', 'orderProducts')->where(function ($query) use ($requests) {
                 if (isset($requests['from_date']) && isset($requests['to_date'])) {
                     $first_date = Date('Y-m-d', strtotime($requests['from_date']));
