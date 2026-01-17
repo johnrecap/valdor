@@ -108,7 +108,7 @@
                             </td>
 
                             <td class="db-table-body-td">
-                                {{ textShortener(order.user.name, 20) }}
+                                {{ textShortener(order.user?.name, 20) || $t('label.guest_order') }}
                             </td>
                             <td class="db-table-body-td">{{ order.total_amount_price }}</td>
                             <td class="db-table-body-td">
