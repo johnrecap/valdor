@@ -86,6 +86,8 @@ class OrderService
                     if (in_array($key, $this->orderFilter)) {
                         if ($key === "status") {
                             $query->where($key, (int) $request);
+                        } else if ($key === 'active') {
+                            $query->where($key, (int) $request);
                         } else if ($key === 'payment_method' && (int)$request < 0) {
                             $query->where('pos_payment_method', abs($request));
                         } else if ($key === 'payment_method' && $request == 1) {
