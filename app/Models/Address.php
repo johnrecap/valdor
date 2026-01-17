@@ -13,6 +13,7 @@ class Address extends Model
     protected $fillable = [
         'label',
         'user_id',
+        'country',
         'governorate',
         'city',
         'street',
@@ -27,6 +28,7 @@ class Address extends Model
         'id'              => 'integer',
         'label'           => 'string',
         'user_id'         => 'integer',
+        'country'         => 'string',
         'governorate'     => 'string',
         'city'            => 'string',
         'street'          => 'string',

@@ -45,6 +45,19 @@
             </div>
             <div class="modal-body">
                 <form @submit.prevent="save">
+                    <!-- Country Selection -->
+                    <div class="mb-3">
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.country') }} *</label>
+                        <select v-model="address.form.country" @change="onCountryChange"
+                            v-bind:class="errors.country ? 'invalid' : ''"
+                            class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
+                            <option value="">{{ $t('label.select_country') }}</option>
+                            <option value="EG">🇪🇬 مصر</option>
+                            <option value="SA">🇸🇦 السعودية</option>
+                        </select>
+                        <small class="db-field-alert" v-if="errors.country">{{ errors.country[0] }}</small>
+                    </div>
+
                     <!-- Governorate Selection -->
                     <div class="mb-3">
                         <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.governorate') }} *</label>
@@ -52,7 +65,7 @@
                             v-bind:class="errors.governorate ? 'invalid' : ''"
                             class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
                             <option value="">{{ $t('label.select_governorate') }}</option>
-                            <option v-for="gov in governorates" :key="gov" :value="gov">{{ gov }}</option>
+                            <option v-for="gov in currentGovernorates" :key="gov" :value="gov">{{ gov }}</option>
                         </select>
                         <small class="db-field-alert" v-if="errors.governorate">{{ errors.governorate[0] }}</small>
                     </div>
@@ -95,8 +108,15 @@
 
                     <!-- Phone -->
                     <div class="mb-3">
-                        <label class="text-xs leading-6 capitalize mb-1 text-heading">{{ $t('label.phone') }}</label>
-                        <input type="text" v-model="address.form.phone"
+                        <label class="text-xs leading-6 capitalize mb-1 text-heading">
+                            {{ $t('label.phone') }} *
+                            <span class="text-gray-400 text-xs">
+                                ({{ address.form.country === 'SA' ? '9 أرقام تبدأ بـ 5' : '11 رقم يبدأ بـ 01' }})
+                            </span>
+                        </label>
+                        <input type="tel" v-model="address.form.phone"
+                            :placeholder="address.form.country === 'SA' ? '5xxxxxxxx' : '01xxxxxxxxx'"
+                            :maxlength="address.form.country === 'SA' ? 9 : 11"
                             v-bind:class="errors.phone ? 'invalid' : ''"
                             class="h-12 w-full rounded-lg border py-1.5 px-2 border-[#D9DBE9]">
                         <small class="db-field-alert" v-if="errors.phone">{{ errors.phone[0] }}</small>
@@ -184,6 +204,7 @@ export default {
             labelEnum: labelEnum,
             address: {
                 form: {
+                    country: "EG",
                     governorate: "",
                     city: "",
                     street: "",
@@ -203,7 +224,7 @@ export default {
             },
             activeAddressId: null,
             errors: {},
-            governorates: [
+            egyptGovernorates: [
                 'القاهرة', 'الجيزة', 'الإسكندرية', 'القليوبية',
                 'الشرقية', 'الدقهلية', 'البحيرة', 'كفر الشيخ',
                 'الغربية', 'المنوفية', 'دمياط', 'بورسعيد',
@@ -211,6 +232,11 @@ export default {
                 'المنيا', 'بني سويف', 'الفيوم', 'أسيوط',
                 'سوهاج', 'قنا', 'الأقصر', 'أسوان',
                 'البحر الأحمر', 'الوادي الجديد', 'مطروح'
+            ],
+            saudiRegions: [
+                'الرياض', 'مكة المكرمة', 'المدينة المنورة', 'القصيم',
+                'الشرقية', 'عسير', 'تبوك', 'حائل',
+                'الحدود الشمالية', 'جازان', 'نجران', 'الباحة', 'الجوف'
             ]
         }
     },
@@ -220,6 +246,9 @@ export default {
         },
         countryCodes: function () {
             return this.$store.getters['frontendCountryCode/lists'];
+        },
+        currentGovernorates: function () {
+            return this.address.form.country === 'SA' ? this.saudiRegions : this.egyptGovernorates;
         },
     },
     mounted() {
@@ -248,6 +277,7 @@ export default {
             this.$store.dispatch("frontendAddress/reset").then().catch();
             this.errors = {};
             this.address.form = {
+                country: "EG",
                 governorate: "",
                 city: "",
                 street: "",
@@ -258,6 +288,10 @@ export default {
             };
             this.address.status = false;
             this.address.switchLabel = "";
+        },
+        onCountryChange: function () {
+            this.address.form.governorate = '';
+            this.address.form.phone = '';
         },
         activeAddress: function (address) {
             this.activeAddressId = address.id;
@@ -272,6 +306,7 @@ export default {
                     this.loading.isActive = false;
                     alertService.successFlip(tempId === null ? 0 : 1, this.$t("label.address"));
                     this.address.form = {
+                        country: "EG",
                         governorate: "",
                         city: "",
                         street: "",
@@ -297,6 +332,7 @@ export default {
             this.$store.dispatch("frontendAddress/edit", address.id).then((res) => {
                 this.loading.isActive = false;
                 this.address.form = {
+                    country: address.country || 'EG',
                     governorate: address.governorate,
                     city: address.city,
                     street: address.street,

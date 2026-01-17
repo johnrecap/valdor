@@ -67,6 +67,8 @@ return [
         "zone_name"                  => "Zone Name",
         "governorate"                => "Governorate",
         "select_governorate"         => "Select Governorate",
+        "country"                    => "Country",
+        "select_country"             => "Select Country",
         "delivery_fee"               => "Delivery Fee",
         "currency_delivery_fee"      => "Delivery Fee",
         "city"                       => "City",

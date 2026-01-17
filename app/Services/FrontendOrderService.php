@@ -173,6 +173,7 @@ class FrontendOrderService
                         OrderAddress::create([
                             'order_id'        => $this->order->id,
                             'user_id'         => Auth::user()->id,
+                            'country'         => $address->country ?? $request->country ?? 'EG',
                             'label'           => $address->label ?? $request->label ?? 'عنوان التوصيل',
                             'governorate'     => $address->governorate ?? $request->governorate ?? '',
                             'city'            => $address->city ?? $request->city ?? '',

@@ -67,6 +67,8 @@ return [
         'zone_name'                  => 'اسم المنطقة',
         'governorate'                => 'المحافظة',
         'select_governorate'         => 'اختر المحافظة',
+        'country'                    => 'الدولة',
+        'select_country'             => 'اختر الدولة',
         'delivery_fee'               => 'رسوم التوصيل',
         'currency_delivery_fee'      => 'رسوم التوصيل',
         'city'                       => 'المدينة',

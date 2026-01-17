@@ -13,6 +13,7 @@ class OrderAddress extends Model
     protected $fillable = [
         'order_id',
         'user_id',
+        'country',
         'label',
         'governorate',
         'city',
@@ -30,6 +31,7 @@ class OrderAddress extends Model
         'id'              => 'integer',
         'order_id'        => 'integer',
         'user_id'         => 'integer',
+        'country'         => 'string',
         'label'           => 'string',
         'governorate'     => 'string',
         'city'            => 'string',

@@ -294,14 +294,35 @@
                                 <span class="text-xs">{{ orderUser.country_code + '' + orderUser.phone }}</span>
                             </li>
 
+                            <!-- Country -->
+                            <li v-if="orderAddress.country" class="flex items-center gap-2.5">
+                                <i class="lab lab-line-flag lab-font-size-14"></i>
+                                <span class="text-xs font-semibold">
+                                    {{ orderAddress.country === 'SA' ? '🇸🇦 السعودية' : '🇪🇬 مصر' }}
+                                </span>
+                            </li>
+
+                            <!-- Full Address -->
                             <li class="flex items-center gap-2.5">
                                 <i class="lab lab-line-location lab-font-size-14"></i>
                                 <span class="text-xs">
-                                    <span v-if="orderAddress.address">
-                                        {{ orderAddress.apartment ? orderAddress.apartment + ', ' : '' }} {{
-                                            orderAddress.address }}
+                                    <span v-if="orderAddress.governorate || orderAddress.city || orderAddress.street">
+                                        {{ orderAddress.governorate ? orderAddress.governorate : '' }}
+                                        {{ orderAddress.city ? ', ' + orderAddress.city : '' }}
+                                        {{ orderAddress.street ? ', ' + orderAddress.street : '' }}
+                                        {{ orderAddress.building_number ? ' - مبنى ' + orderAddress.building_number : '' }}
+                                        {{ orderAddress.apartment ? ', شقة ' + orderAddress.apartment : '' }}
+                                    </span>
+                                    <span v-else-if="orderAddress.address">
+                                        {{ orderAddress.address }}
                                     </span>
                                 </span>
+                            </li>
+
+                            <!-- Delivery Phone (Important!) -->
+                            <li v-if="orderAddress.phone" class="flex items-center gap-2.5 bg-primary/10 p-2 rounded-lg">
+                                <i class="lab lab-line-call-calling lab-font-size-14 text-primary"></i>
+                                <span class="text-sm font-bold text-primary">📞 {{ orderAddress.phone }}</span>
                             </li>
                         </ul>
                     </div>
